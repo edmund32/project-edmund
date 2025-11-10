@@ -1,6 +1,6 @@
 const FAKESTORE_URL = "https://fakestoreapi.com/products";
 
-// 🔹 Ambil semua produk
+// Ambil semua produk
 export const getProducts = async () => {
   try {
     const res = await fetch(FAKESTORE_URL);
@@ -13,7 +13,7 @@ export const getProducts = async () => {
   }
 };
 
-// 🔹 Ambil detail produk berdasarkan ID
+// Ambil detail produk berdasarkan ID
 export const getDetailProduct = async (id, callback) => {
   if(!id) return;
   try {

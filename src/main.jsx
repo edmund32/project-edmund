@@ -41,7 +41,7 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+  //<StrictMode>
     <Provider store={store}>
       <DarkModeContextProvider>
         <TotalPriceProvider>
@@ -51,5 +51,5 @@ createRoot(document.getElementById("root")).render(
         </TotalPriceProvider>
       </DarkModeContextProvider>
     </Provider>
-  </StrictMode>
+  //</StrictMode>
 );
