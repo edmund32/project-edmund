@@ -1,5 +1,5 @@
+// hooks/useAuth.jsx
 import { useEffect, useState } from "react";
-import { getUsername } from "../services/auth.services";
 import { useNavigate } from "react-router-dom";
 
 export const useAuth = () => {
@@ -8,21 +8,15 @@ export const useAuth = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      const name = getUsername(token);
-      setUsername(name);
-    }
-
-    // tandai bahwa proses pengecekan selesai (biar bisa dipakai untuk loading screen, kalau mau)
+    const name = localStorage.getItem("username");
+    if (name) setUsername(name);
     setIsAuthChecked(true);
   }, []);
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate("/login"); 
+    navigate("/login");
   };
 
-  return { username, isAuthChecked, handleLogout };
+  return { username, setUsername, isAuthChecked, handleLogout };
 };

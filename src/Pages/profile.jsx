@@ -1,16 +1,21 @@
+// Pages/profile.jsx
 import { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { updateUser, deleteUser } from "../services/auth.services";
-import { passwordValidation } from "../components/Fragments/Validation/validation";
+import {
+  passwordValidation,
+  usernameValidation,
+  updateValidation,
+} from "../components/Fragments/Validation/validation";
 import InputForm from "../components/Elements/Input";
 import Button from "../components/Elements/Button";
 import { DarkMode } from "../context/DarkMode";
 import { useNotification } from "../context/NotificationCon";
 
 const ProfilePage = () => {
-  const { username, isAuthChecked } = useAuth();
+  const { username, setUsername, isAuthChecked } = useAuth();
   const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
   const { isDarkMode } = useContext(DarkMode);
@@ -21,6 +26,7 @@ const ProfilePage = () => {
     handleSubmit,
     reset,
     formState: { errors },
+    setError,
   } = useForm({
     defaultValues: { username: "", password: "" },
   });
@@ -30,13 +36,37 @@ const ProfilePage = () => {
   }, [isAuthChecked, username, reset]);
 
   const onSubmit = async (data) => {
+    const currentUsername = localStorage.getItem("username");
+    const currentPassword = localStorage.getItem("password");
+
+    // Custom validation
+    const errorVal = updateValidation(data, currentUsername, currentPassword);
+    if (Object.keys(errorVal).length > 0) {
+      if (errorVal.username)
+        setError("username", { message: errorVal.username });
+      if (errorVal.password)
+        setError("password", { message: errorVal.password });
+      if (errorVal.general) showNotification(errorVal.general, "error");
+      return;
+    }
+
     try {
-      await updateUser(userId, data);
-      showNotification("Profile berhasil di-update!", "success");
+      const updatedUser = await updateUser(userId, data);
+
+      if (updatedUser.username) {
+        localStorage.setItem("username", updatedUser.username);
+        setUsername(updatedUser.username);
+      }
+
+      if (updatedUser.password) {
+        localStorage.setItem("password", updatedUser.password);
+      }
+
+      showNotification("Profil berhasil di-update!", "success");
       navigate("/products");
     } catch (err) {
       console.error(err);
-      showNotification("Gagal melakukan update profile", "error");
+      showNotification("Profile gagal di-update...", "error");
     }
   };
 
@@ -94,16 +124,13 @@ const ProfilePage = () => {
           Update or delete your username or password below
         </p>
 
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="space-y-4 sm:space-y-5"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-5">
           <InputForm
             label="Change Username"
             name="username"
             type="text"
             placeholder="Enter new username..."
-            {...register("username", { required: "Username is required" })}
+            {...register("username", usernameValidation)}
             error={errors.username?.message}
           />
 
@@ -122,8 +149,7 @@ const ProfilePage = () => {
               variant={{
                 bg: isDarkMode ? "bg-indigo-400" : "bg-indigo-700",
                 text: "text-white",
-                hoverBg: "hover:bg-indigo-700",
-                hoverText: "",
+                hoverBg: "hover:bg-indigo-50",
               }}
               className="w-full h-12 font-semibold"
             >
@@ -137,7 +163,6 @@ const ProfilePage = () => {
                 bg: isDarkMode ? "bg-red-700" : "bg-red-600",
                 text: "text-white",
                 hoverBg: "hover:bg-red-900",
-                hoverText: "",
               }}
               className="w-full h-12 font-semibold"
             >
@@ -149,19 +174,19 @@ const ProfilePage = () => {
 
       <p className="text-xs sm:text-sm text-slate-200 mt-6 sm:mt-10 relative">
         Back to{" "}
-        <span
+        <Link
+          to="/"
           className={`cursor-pointer ${
             isDarkMode
               ? "text-indigo-400 font-semibold hover:text-indigo-600 transition-colors duration-300"
               : "text-indigo-800 font-semibold hover:text-indigo-600 transition-colors duration-300"
           }`}
         >
-          <Link to="/">Home</Link>
-        </span>
+          Home
+        </Link>
       </p>
     </div>
   );
 };
 
 export default ProfilePage;
-//test

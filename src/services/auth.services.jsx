@@ -39,9 +39,9 @@ export const login = async (data, callback) => {
       return;
     }
 
-    // Simulasi token & simpan data user
+    // Simulasi token & simpan data user local storage
     const fakeToken = `mocktoken-${user.id}`;
-    localStorage.setItem("token", fakeToken);
+    localStorage.setItem("password", user.password);
     localStorage.setItem("userId", user.id);
     localStorage.setItem("username", user.username);
 
@@ -59,12 +59,33 @@ export const getUsername = () => {
 
 // Update user data
 export const updateUser = async (id, data) => {
-  const res = await fetch(`${API_URL}/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
-  return await res.json();
+  try {
+    const res = await fetch(`${API_URL}/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) throw new Error("Gagal update user");
+
+    const updatedUser = await res.json();
+
+    // Update juga ke localStorage biar sinkron
+    const storedUser = JSON.parse(localStorage.getItem("user")) || {};
+    const newUser = { ...storedUser, ...updatedUser };
+    localStorage.setItem("user", JSON.stringify(newUser));
+
+    // Simpan username & password juga biar gampang dipakai ulang
+    if (updatedUser.username)
+      localStorage.setItem("username", updatedUser.username);
+    if (updatedUser.password)
+      localStorage.setItem("password", updatedUser.password);
+
+    return updatedUser;
+  } catch (err) {
+    console.error("Error updateUser:", err);
+    throw err;
+  }
 };
 
 // Delete user
