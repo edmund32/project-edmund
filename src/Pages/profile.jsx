@@ -1,5 +1,5 @@
 // Pages/profile.jsx
-import { useContext, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
@@ -13,6 +13,7 @@ import InputForm from "../components/Elements/Input";
 import Button from "../components/Elements/Button";
 import { DarkMode } from "../context/DarkMode";
 import { useNotification } from "../context/NotificationCon";
+import ConfirmationPopup from "../components/Fragments/ConfirmationPopup";
 
 const ProfilePage = () => {
   const { username, setUsername, isAuthChecked } = useAuth();
@@ -20,6 +21,9 @@ const ProfilePage = () => {
   const navigate = useNavigate();
   const { isDarkMode } = useContext(DarkMode);
   const { showNotification } = useNotification();
+  const [showUpdatePopup, setShowUpdatePopup] = useState(false);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [formData, setFormData] = useState({});
 
   const {
     register,
@@ -50,8 +54,13 @@ const ProfilePage = () => {
       return;
     }
 
+    setFormData(data);
+    setShowUpdatePopup(true);
+  };
+
+  const handleUpdateConfirm = async () => {
     try {
-      const updatedUser = await updateUser(userId, data);
+      const updatedUser = await updateUser(userId, formData);
 
       if (updatedUser.username) {
         localStorage.setItem("username", updatedUser.username);
@@ -63,6 +72,7 @@ const ProfilePage = () => {
       }
 
       showNotification("Profil berhasil di-update!", "success");
+      setShowUpdatePopup(false);
       navigate("/products");
     } catch (err) {
       console.error(err);
@@ -71,16 +81,18 @@ const ProfilePage = () => {
   };
 
   const handleDelete = async () => {
-    if (confirm("Are you sure you want to delete your account?")) {
-      try {
-        await deleteUser(userId);
-        localStorage.clear();
-        showNotification("Akun berhasil dihapus!", "success");
-        navigate("/login");
-      } catch (err) {
-        console.error(err);
-        showNotification("Gagal menghapus akun...", "error");
-      }
+    setShowDeletePopup(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      await deleteUser(userId);
+      localStorage.clear();
+      showNotification("Akun berhasil dihapus!", "success");
+      navigate("/login");
+    } catch (err) {
+      console.error(err);
+      showNotification("Gagal menghapus akun...", "error");
     }
   };
 
@@ -124,7 +136,10 @@ const ProfilePage = () => {
           Update or delete your username or password below
         </p>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-5">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-4 sm:space-y-5"
+        >
           <InputForm
             label="Change Username"
             name="username"
@@ -163,6 +178,7 @@ const ProfilePage = () => {
                 bg: isDarkMode ? "bg-red-700" : "bg-red-600",
                 text: "text-white",
                 hoverBg: "hover:bg-red-900",
+                hoverText: "text-slate-100",
               }}
               className="w-full h-12 font-semibold"
             >
@@ -185,6 +201,24 @@ const ProfilePage = () => {
           Home
         </Link>
       </p>
+
+      <ConfirmationPopup
+        show={showUpdatePopup}
+        onClose={() => setShowUpdatePopup(false)}
+        onConfirm={handleUpdateConfirm}
+        message="Apakah kamu yakin ingin menyimpan perubahan pada profil?"
+        confirmText="Yes, save changes"
+        cancelText="Cancel"
+      />
+
+      <ConfirmationPopup
+        show={showDeletePopup}
+        onClose={() => setShowDeletePopup(false)}
+        onConfirm={handleDeleteConfirm}
+        message="Apakah kamu yakin ingin menghapus akun ini? Tindakan ini tidak dapat dibatalkan."
+        confirmText="Yes, delete account"
+        cancelText="Cancel"
+      />
     </div>
   );
 };
