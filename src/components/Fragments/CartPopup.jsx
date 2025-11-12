@@ -10,6 +10,7 @@ import {
   useTotalPrice,
 } from "../../context/totalPriceCon";
 import { clearCart } from "../../redux/slices/cartSlice";
+import ConfirmationPopup from "./ConfirmationPopup";
 
 const CartPopup = ({ onClose }) => {
   const { isDarkMode } = useContext(DarkMode);
@@ -18,7 +19,12 @@ const CartPopup = ({ onClose }) => {
   const [products, setProducts] = useState([]);
   const totalDispatch = useTotalPriceDispatch();
   const { total } = useTotalPrice();
-  const [showConfirm, setShowConfirm] = useState(false);
+  const [showPopup, setShowPopup] = useState(false); // state buat popup
+
+  const confirmClearCart = () => {
+    dispatch(clearCart());
+    setShowPopup(false);
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -44,11 +50,6 @@ const CartPopup = ({ onClose }) => {
       totalDispatch({ type: "UPDATE", payload: { total: 0 } });
     }
   }, [cart, products]);
-
-  const confirmClearCart = () => {
-    dispatch(clearCart());
-    setShowConfirm(false);
-  };
 
   return createPortal(
     <div
@@ -85,7 +86,7 @@ const CartPopup = ({ onClose }) => {
             <div className="max-h-[55vh] overflow-y-auto pr-1 overflow-x-auto">
               <TableCart
                 products={products}
-                onClearCart={() => setShowConfirm(true)}
+                onClearCart={() => setShowPopup(true)}
               />
             </div>
 
@@ -102,55 +103,15 @@ const CartPopup = ({ onClose }) => {
           </>
         )}
 
-        {/* Modal Konfirmasi Hapus Semua */}
-        {showConfirm && (
-          <div className="fixed inset-0 z-[999] bg-black/50 backdrop-blur-[2px] flex items-center justify-center">
-            <div
-              className={`p-6 rounded-xl shadow-lg w-72 ${
-                isDarkMode
-                  ? "bg-slate-800 text-white"
-                  : "bg-white text-slate-900"
-              }`}
-            >
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold text-lg">Confirm</h3>
-                <button
-                  onClick={() => setShowConfirm(false)}
-                  className="hover:opacity-70"
-                >
-                  <X size={18} />
-                </button>
-              </div>
-
-              <p className="text-sm mb-5">
-                Are you sure you want to delete all items from the cart?
-              </p>
-
-              <div className="flex justify-end gap-2">
-                <button
-                  onClick={() => setShowConfirm(false)}
-                  className={`px-3 py-1.5 rounded-md text-sm font-medium ${
-                    isDarkMode
-                      ? "bg-slate-700 hover:bg-slate-600"
-                      : "bg-gray-200 hover:bg-gray-300"
-                  }`}
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={confirmClearCart}
-                  className={`px-3 py-1.5 rounded-md text-sm font-medium text-white ${
-                    isDarkMode
-                      ? "bg-red-500 hover:bg-red-600"
-                      : "bg-red-600 hover:bg-red-700"
-                  }`}
-                >
-                  Yes, delete all
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Popup COnfirmation */}
+        <ConfirmationPopup
+          show={showPopup}
+          onClose={() => setShowPopup(false)}
+          onConfirm={confirmClearCart}
+          message="Are you sure you want to delete all items from the cart?"
+          confirmText="Yes, delete all"
+          cancelText="Cancel"
+        />
       </div>
     </div>,
     document.body
