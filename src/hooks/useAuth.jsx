@@ -1,11 +1,14 @@
-// hooks/useAuth.jsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { clearCart } from "../redux/slices/cartSlice";
+import { deleteUser } from "../services/auth.services";
 
 export const useAuth = () => {
   const [username, setUsername] = useState("");
   const [isAuthChecked, setIsAuthChecked] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const name = localStorage.getItem("username");
@@ -14,7 +17,9 @@ export const useAuth = () => {
   }, []);
 
   const handleLogout = () => {
+    dispatch(clearCart());
     localStorage.clear();
+    setUsername("");
     navigate("/login");
   };
 

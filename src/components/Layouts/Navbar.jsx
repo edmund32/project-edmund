@@ -5,7 +5,8 @@ import { useAuth } from "../../hooks/useAuth";
 import { useNotification } from "../../context/NotificationCon";
 import { ShoppingCart, Sun, Moon } from "lucide-react";
 import CartPopup from "../Fragments/CartPopup";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
+import { clearCart } from "../../redux/slices/cartSlice";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const Navbar = () => {
   const cart = useSelector((state) => state.cart.data ?? []);
   const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
   const [isBouncing, setIsBouncing] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -38,6 +40,7 @@ const Navbar = () => {
 
   const handleLogoutClick = () => {
     handleLogout();
+    dispatch(clearCart())
     setIsOpen(false);
     showNotification("Anda berhasil logout.");
   };
