@@ -76,7 +76,6 @@ const ProductsPage = () => {
         </p>
 
         {/* Search Bar */}
-        {/* Search + Filter Row */}
         <div className="max-w-2xl w-full mx-auto mb-10 flex flex-col sm:flex-row gap-3 sm:gap-4">
           {/* Search */}
           <input
