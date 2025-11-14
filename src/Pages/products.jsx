@@ -11,31 +11,39 @@ const ProductsPage = () => {
   const [filtered, setFiltered] = useState([]);
   const { isDarkMode } = useContext(DarkMode);
   const { isAuthChecked } = useAuth();
+  const [categories, setCategories] = useState([]);
+  const [category, setCategory] = useState("all");
 
   useEffect(() => {
     const loadData = async () => {
       const data = await getProducts();
       setProducts(data);
       setFiltered(data);
+
+      const uniqueCategories = ["all", ...new Set(data.map((p) => p.category))];
+      setCategories(uniqueCategories);
     };
     loadData();
   }, []);
 
   // Handle search
   useEffect(() => {
-    if (!search.trim()) {
-      setFiltered(products);
-    } else {
+    let result = products;
+
+    if (category !== "all") {
+      result = result.filter((p) => p.category === category);
+    }
+
+    if (search.trim()) {
       const lower = search.toLowerCase();
-      setFiltered(
-        products.filter(
-          (p) =>
-            p.title.toLowerCase().includes(lower) ||
-            p.category.toLowerCase().includes(lower)
-        )
+      result = result.filter(
+        (p) =>
+          p.title.toLowerCase().includes(lower) ||
+          p.category.toLowerCase().includes(lower)
       );
     }
-  }, [search, products]);
+    setFiltered(result);
+  }, [search, products, category]);
 
   if (!isAuthChecked) return null;
 
@@ -68,11 +76,13 @@ const ProductsPage = () => {
         </p>
 
         {/* Search Bar */}
-        <div className="max-w-md mx-auto mb-10">
+        {/* Search + Filter Row */}
+        <div className="max-w-2xl w-full mx-auto mb-10 flex flex-col sm:flex-row gap-3 sm:gap-4">
+          {/* Search */}
           <input
             type="text"
-            placeholder="Search by product name or category..."
-            className={` w-full px-4 py-2 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-300 ${
+            placeholder="Search by name or category..."
+            className={`flex-1 px-4 py-2 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-300 ${
               isDarkMode
                 ? "bg-slate-800 text-white placeholder-gray-400"
                 : "bg-white text-gray-800 placeholder-gray-500"
@@ -80,6 +90,23 @@ const ProductsPage = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
+
+          {/* Category Filter */}
+          <select
+            className={`px-4 py-2 rounded-lg shadow cursor-pointer transition-all duration-300 ${
+              isDarkMode
+                ? "bg-slate-800 text-white border-slate-600"
+                : "bg-white text-gray-800 border-gray-300"
+            }`}
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat[0].toUpperCase() + cat.slice(1)}
+              </option>
+            ))}
+          </select>
         </div>
       </header>
 
