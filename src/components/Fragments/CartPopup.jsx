@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { DarkMode } from "../../context/DarkMode";
 import { useSelector, useDispatch } from "react-redux";
 import { X } from "lucide-react";
-import TableCart from "./TableCart";
+import TableCart from "./tableCart";
 import { getProducts } from "../../services/product.services";
 import {
   useTotalPriceDispatch,
