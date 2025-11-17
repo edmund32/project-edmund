@@ -4,6 +4,7 @@ import { DarkMode } from "../context/DarkMode";
 import Navbar from "../components/Layouts/Navbar";
 import { ProductsCard } from "../components/Fragments/ProductsCard";
 import { getProducts } from "../services/product.services";
+import { Filter } from "lucide-react";
 
 const ProductsPage = () => {
   const [products, setProducts] = useState([]);
@@ -47,9 +48,76 @@ const ProductsPage = () => {
 
   if (!isAuthChecked) return null;
 
+  const CategoryDropdown = ({
+    categories,
+    category,
+    setCategory,
+    isDarkMode,
+  }) => {
+    const [open, setOpen] = useState(false);
+
+    return (
+      <div className="relative w-12 sm:w-48">
+        <button
+          onClick={() => setOpen(!open)}
+          className={`w-full px-4 py-2 rounded-lg shadow flex justify-between items-center cursor-pointer 
+                      transition-colors duration-300
+                      ${
+                        isDarkMode
+                          ? "bg-slate-800 text-white hover:bg-slate-700"
+                          : "bg-white text-gray-800 hover:bg-gray-100"
+                      }`}
+        >
+          {/* Text hanya muncul di layar sm ke atas */}
+          <span className="capitalize hidden sm:block">{category}</span>
+
+          {/* Icon filter */}
+          <Filter
+            size={20}
+            className={`transition-transform duration-300 my-1.25 ${
+              open ? "rotate-90" : "rotate-0"
+            }`}
+          />
+        </button>
+
+        {/* Dropdown items */}
+        <ul
+          className={`absolute right-0
+                      z-20 mt-2 min-w-full sm:w-full max-h-100 overflow-auto 
+                      rounded-lg border shadow-md transition-all duration-300 origin-top 
+        ${
+          open
+            ? "scale-100 opacity-100"
+            : "scale-95 opacity-0 pointer-events-none"
+        }
+        ${
+          isDarkMode
+            ? "bg-slate-800 text-white border-slate-700"
+            : "bg-white text-gray-900 border-gray-200"
+        }`}
+        >
+          {categories?.map((cat) => (
+            <li
+              key={cat}
+              onClick={() => {
+                setCategory(cat);
+                setOpen(false);
+              }}
+              className={`px-4 py-2 capitalize cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 ${
+                category === cat ? "font-bold" : ""
+              }`}
+            >
+              {cat}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  };
+
   return (
     <div
-      className={`min-h-screen transition-colors duration-500 ${
+      className={`min-h-screen transition-colors duration-300 ${
         isDarkMode
           ? "bg-gradient-to-b from-slate-900 to-slate-800 text-white"
           : "bg-slate-100 text-black"
@@ -58,7 +126,7 @@ const ProductsPage = () => {
       <Navbar />
 
       {/* Header Section */}
-      <header className="max-w-7xl mx-auto mt-10 px-5 sm:px-10 text-center transition-colors duration-300">
+      <header className="max-w-7xl mx-auto mt-10 px-5 sm:px-10 text-center transition-colors duration-200">
         <h1
           className={`text-3xl sm:text-4xl font-bold mb-3 ${
             isDarkMode ? "text-indigo-300" : "text-indigo-600"
@@ -76,7 +144,7 @@ const ProductsPage = () => {
         </p>
 
         {/* Search Bar */}
-        <div className="max-w-2xl w-full mx-auto mb-10 flex flex-col sm:flex-row gap-3 sm:gap-4">
+        <div className="max-w-2xl w-full mx-auto mb-10 flex flex-row gap-3 sm:gap-4">
           {/* Search */}
           <input
             type="text"
@@ -91,21 +159,12 @@ const ProductsPage = () => {
           />
 
           {/* Category Filter */}
-          <select
-            className={`px-4 py-2 rounded-lg shadow cursor-pointer transition-all duration-300 ${
-              isDarkMode
-                ? "bg-slate-800 text-white border-slate-600"
-                : "bg-white text-gray-800 border-gray-300"
-            }`}
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            {categories.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat[0].toUpperCase() + cat.slice(1)}
-              </option>
-            ))}
-          </select>
+          <CategoryDropdown
+            categories={categories}
+            category={category}
+            setCategory={setCategory}
+            isDarkMode={isDarkMode}
+          />
         </div>
       </header>
 
