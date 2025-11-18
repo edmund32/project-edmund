@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { clearCart } from "../redux/slices/cartSlice";
-import { deleteUser } from "../services/auth.services";
 
 export const useAuth = () => {
   const [username, setUsername] = useState("");

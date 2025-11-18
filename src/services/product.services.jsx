@@ -1,26 +1,21 @@
-const FAKESTORE_URL = "https://fakestoreapi.com/products";
+import { fakestore } from "./fakestore";
 
-// Ambil semua produk
 export const getProducts = async () => {
   try {
-    const res = await fetch(FAKESTORE_URL);
-    if (!res.ok) throw new Error("Gagal memuat daftar produk");
-    const data = await res.json();
-    return data;
+    const res = await fakestore.get("/products");
+    return res.data;
   } catch (err) {
     console.error("Error getProducts:", err);
     return [];
   }
 };
 
-// Ambil detail produk berdasarkan ID
 export const getDetailProduct = async (id, callback) => {
-  if(!id) return;
+  if (!id) return;
+
   try {
-    const res = await fetch(`${FAKESTORE_URL}/${id}`);
-    if (!res.ok) throw new Error("Gagal memuat detail produk");
-    const data = await res.json();
-    callback(data);
+    const res = await fakestore.get(`/products/${id}`);
+    callback(res.data);
   } catch (err) {
     console.error("Error getDetailProduct:", err);
   }

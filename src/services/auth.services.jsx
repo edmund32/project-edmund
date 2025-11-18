@@ -1,25 +1,19 @@
-const API_URL = "https://6906018eee3d0d14c13464ed.mockapi.io/users";
+import { api } from "./mockAPI";
+import { generateFakeJWT } from "./fakeJWT";
+
+const API_URL = "/users";
 
 // Get all users
 export const getUsers = async () => {
-  const res = await fetch(API_URL);
-  if (!res.ok) throw new Error("Gagal memuat data pengguna");
-  return await res.json();
+  const res = await api.get(API_URL);
+  return res.data;
 };
 
 // Register new user
 export const registerUser = async (userData) => {
   try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userData),
-    });
-
-    if (!res.ok) throw new Error("Gagal registrasi");
-
-    const result = await res.json();
-    return { success: true, data: result };
+    const res = await api.post(API_URL, userData);
+    return { success: true, data: res.data };
   } catch (error) {
     console.error("Error saat registrasi:", error);
     return { success: false, error: error.message };
@@ -39,20 +33,23 @@ export const login = async (data, callback) => {
       return;
     }
 
-    // Simulasi token & simpan data user local storage
-    const fakeToken = `mocktoken-${user.id}`;
-    localStorage.setItem("password", user.password);
+    // generate fake jwt
+    const token = generateFakeJWT(user);
+
+    // Simpan token & user info
+    localStorage.setItem("token", token);
     localStorage.setItem("userId", user.id);
     localStorage.setItem("username", user.username);
+    localStorage.setItem("password", user.password);
 
-    callback(true, fakeToken);
+    callback(true, token);
   } catch (err) {
     console.error(err);
     callback(false, null);
   }
 };
 
-// Get username (untuk useAuth)
+// Get username
 export const getUsername = () => {
   return localStorage.getItem("username") || "";
 };
@@ -60,22 +57,15 @@ export const getUsername = () => {
 // Update user data
 export const updateUser = async (id, data) => {
   try {
-    const res = await fetch(`${API_URL}/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
+    const res = await api.put(`${API_URL}/${id}`, data);
+    const updatedUser = res.data;
 
-    if (!res.ok) throw new Error("Gagal update user");
-
-    const updatedUser = await res.json();
-
-    // Update juga ke localStorage biar sinkron
+    // Sinkron localStorage
     const storedUser = JSON.parse(localStorage.getItem("user")) || {};
     const newUser = { ...storedUser, ...updatedUser };
+
     localStorage.setItem("user", JSON.stringify(newUser));
 
-    // Simpan username & password juga biar gampang dipakai ulang
     if (updatedUser.username)
       localStorage.setItem("username", updatedUser.username);
     if (updatedUser.password)
@@ -88,13 +78,12 @@ export const updateUser = async (id, data) => {
   }
 };
 
-// Delete user
+// Delete
 export const deleteUser = async (id) => {
-  const res = await fetch(`${API_URL}/${id}`, {
-    method: "DELETE",
-  });
-  return await res.json();
+  const res = await api.delete(`${API_URL}/${id}`);
+  return res.data;
 };
+
 
 // import axios from "axios";
 // import { jwtDecode } from "jwt-decode";
