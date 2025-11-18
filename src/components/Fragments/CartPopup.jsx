@@ -10,7 +10,7 @@ import {
   useTotalPrice,
 } from "../../context/totalPriceCon";
 import { clearCart } from "../../redux/slices/cartSlice";
-import ConfirmationPopup from "./ConfirmationPopup";
+import ConfirmationPopup from "../Global/ConfirmationPopup";
 
 const CartPopup = ({ onClose }) => {
   const { isDarkMode } = useContext(DarkMode);
