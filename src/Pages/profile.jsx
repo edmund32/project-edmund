@@ -13,7 +13,7 @@ import InputForm from "../components/Elements/Input";
 import Button from "../components/Elements/Button";
 import { DarkMode } from "../context/DarkMode";
 import { useNotification } from "../context/NotificationCon";
-import ConfirmationPopup from "../components/Fragments/ConfirmationPopup";
+import ConfirmationPopup from "../components/Global/ConfirmationPopup";
 
 const ProfilePage = () => {
   const { username, setUsername, isAuthChecked } = useAuth();
