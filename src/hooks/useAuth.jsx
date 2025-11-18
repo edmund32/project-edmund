@@ -12,7 +12,9 @@ export const useAuth = () => {
   useEffect(() => {
     const name = localStorage.getItem("username");
     if (name) setUsername(name);
+    
     setIsAuthChecked(true);
+
   }, []);
 
   const handleLogout = () => {
