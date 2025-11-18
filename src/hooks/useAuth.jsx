@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { clearCart } from "../redux/slices/cartSlice";
+import { validateToken } from "../services/utils/auth";
 
 export const useAuth = () => {
   const [username, setUsername] = useState("");
@@ -10,6 +11,15 @@ export const useAuth = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    const isValid = validateToken();
+
+    if (!isValid) {
+      localStorage.clear();
+      dispatch(clearCart());
+      navigate("/login");
+      return;
+    }
+
     const name = localStorage.getItem("username");
     if (name) setUsername(name);
     

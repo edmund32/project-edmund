@@ -1,5 +1,5 @@
 import { api } from "./mockAPI";
-import { generateFakeJWT } from "./fakeJWT";
+import { generateFakeJWT } from "./utils/fakeJwt";
 
 const API_URL = "/users";
 
