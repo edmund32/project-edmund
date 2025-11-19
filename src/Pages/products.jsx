@@ -5,6 +5,7 @@ import Navbar from "../components/Layouts/Navbar";
 import { ProductsCard } from "../components/Fragments/ProductsCard";
 import { getProducts } from "../services/product.services";
 import { Filter } from "lucide-react";
+import Input from "../components/Elements/Input/Input";
 
 const ProductsPage = () => {
   const [products, setProducts] = useState([]);
@@ -146,14 +147,10 @@ const ProductsPage = () => {
         {/* Search Bar */}
         <div className="max-w-2xl w-full mx-auto mb-10 flex flex-row gap-3 sm:gap-4">
           {/* Search */}
-          <input
+          <Input
             type="text"
             placeholder="Search by name or category..."
-            className={`flex-1 px-4 py-2 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-300 ${
-              isDarkMode
-                ? "bg-slate-800 text-white placeholder-gray-400"
-                : "bg-white text-gray-800 placeholder-gray-500"
-            }`}
+            className="flex-1 px-4 py-2  shadow focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-300"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
