@@ -11,11 +11,11 @@ const ProductsCard = ({ children }) => {
 
   return (
     <div
-      className={`w-full max-w-xs rounded-2xl border overflow-hidden group transition-all duration-300
+      className={`w-full max-w-xs rounded-2xl overflow-hidden group transition-all duration-300
         ${
           isDarkMode
-            ? "bg-slate-800 text-white border-slate-700 shadow-md hover:shadow-2xl hover:border-indigo-600"
-            : "bg-white text-gray-900 border-gray-200 shadow-md hover:shadow-xl hover:border-indigo-300"
+            ? "bg-slate-700 text-white shadow-md "
+            : "bg-white text-gray-900 shadow-md  "
         }`}
     >
       {children}
@@ -34,9 +34,9 @@ const Header = ({ image }) => {
         alt="product"
         className={`w-full h-full object-contain p-4 sm:p-6 transform 
         transition-all duration-300 ease-out  
-        ${isDarkMode ? "bg-slate-900" : "bg-slate-100"}`}
+        ${isDarkMode ? "bg-slate-800" : "bg-slate-200"}`}
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      {/* <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div> */}
     </div>
   );
 };
@@ -49,7 +49,7 @@ const Body = ({ title, children, category, rating }) => {
 
   return (
     <div className="px-5 py-4 space-y-2">
-      {/* 🏷️ Category Tag */}
+      {/* Category */}
       {category && (
         <span
           className={`text-xs font-medium px-2 py-1 rounded-full transition-all duration-300 ${
@@ -124,10 +124,10 @@ const Footer = ({ price, id }) => {
         <Link to={`/products/${id}`}>
           <Button
             variant={{
-              bg: isDarkMode ? "bg-slate-700" : "bg-slate-200",
-              text: isDarkMode ? "text-slate-200" : "text-slate-800",
-              hoverBg: "hover:bg-indigo-500",
-              hoverText: "hover:text-white",
+              bg: isDarkMode ? "bg-slate-800" : "bg-slate-200",
+              text: isDarkMode ? "text-slate-200" : "text-slate-700",
+              hoverBg: isDarkMode ? "hover:bg-slate-900" : "hover:bg-slate-300",
+              hoverText: isDarkMode ? "hover:text-white" : "hover:text-slate-700",
             }}
             className="text-sm px-3 py-2 rounded-lg font-medium transition-all duration-200 active:scale-95"
           >
@@ -139,7 +139,7 @@ const Footer = ({ price, id }) => {
           variant={{
             bg: isDarkMode ? "bg-indigo-500" : "bg-indigo-600",
             text: "text-white",
-            hoverBg: "hover:bg-indigo-700",
+            hoverBg: isDarkMode ? "hover:bg-indigo-700" : "hover:bg-indigo-800",
             hoverText: "hover:text-white",
           }}
           className="text-sm px-3 py-2 rounded-lg font-medium transition-all duration-200 active:scale-95 shadow-sm hover:shadow-md"
