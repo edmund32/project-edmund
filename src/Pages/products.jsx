@@ -84,7 +84,7 @@ const ProductsPage = () => {
         {/* Dropdown items */}
         <ul
           className={`absolute right-0
-                      z-20 mt-2 min-w-full sm:w-full max-h-100 overflow-auto 
+                      z-20 min-w-full sm:w-full max-h-100 overflow-auto 
                       rounded-lg border shadow-md transition-all duration-300 origin-top 
         ${
           open
@@ -150,7 +150,7 @@ const ProductsPage = () => {
           <Input
             type="text"
             placeholder="Search by name or category..."
-            className="flex-1 px-4 py-2  shadow focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-300"
+            className="flex-1 px-4 py-2 shadow focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-300"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
