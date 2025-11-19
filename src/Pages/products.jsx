@@ -174,9 +174,9 @@ const ProductsPage = () => {
             "
           </p>
         ) : (
-          <div className="w-full max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 justify-items-center mx-auto">
+          <div className="w-full max-w-6xl grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-8 justify-items-center mx-auto">
             {filtered.map((product) => (
-              <ProductsCard key={product.id}>
+              <ProductsCard key={product.id} id={product.id}>
                 <ProductsCard.Header image={product.image} />
                 <ProductsCard.Body
                   title={product.title}
