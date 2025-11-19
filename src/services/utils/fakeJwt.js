@@ -10,7 +10,7 @@ export const generateFakeJWT = (user) => {
   const payload = {
     id: user.id,
     username: user.username,
-    exp: Math.floor(Date.now() / 1000) + 5 * 60, // expire 5 menit (DETIK)
+    exp: Math.floor(Date.now() / 1000) + 3600, // expired 1 jam
   };
 
   const encodedHeader = base64(JSON.stringify(header));
