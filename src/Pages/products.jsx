@@ -104,9 +104,10 @@ const ProductsPage = () => {
                 setCategory(cat);
                 setOpen(false);
               }}
-              className={`px-4 py-2 capitalize cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 ${
-                category === cat ? "font-bold" : ""
-              }`}
+              className={`px-4 py-2 capitalize cursor-pointer
+                ${isDarkMode ? "hover:bg-slate-700" : "hover:bg-gray-200"} 
+                ${category === cat ? "font-bold" : ""
+              }`} 
             >
               {cat}
             </li>
