@@ -41,7 +41,7 @@ const CartPopup = ({ onClose }) => {
   useEffect(() => {
     if (products.length > 0 && cart.length > 0) {
       const total = cart.reduce((acc, item) => {
-        const product = products.find((p) => p.id === item.id);
+        const product = products.find((p) => String(p.id) === String(item.id));
         if (!product) return acc;
         return acc + product.price * item.qty;
       }, 0);
