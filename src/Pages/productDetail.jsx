@@ -13,6 +13,7 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const { isDarkMode } = useContext(DarkMode);
   const dispatch = useDispatch();
+  const [qty, setQty] = useState(1);
 
   useEffect(() => {
     getDetailProduct(id, (data) => {
@@ -41,7 +42,7 @@ const ProductDetail = () => {
       </div>
     );
 
-  // ambil rating dari product.rating?.rate
+  // rating
   const rating = product.rating?.rate || 0;
   const stars = Array.from({ length: 5 }, (_, i) => (
     <Star
@@ -65,68 +66,130 @@ const ProductDetail = () => {
     >
       <Navbar />
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col md:flex-row gap-10 items-center">
-        {/* Gambar */}
-        <div className="w-full md:w-1/2 flex justify-center">
-          <div
-            className={`rounded-2xl shadow-xl p-6 ${
-              isDarkMode ? "bg-slate-800" : "bg-white"
-            }`}
-          >
-            <img
-              src={product.image}
-              alt={product.title}
-              className="w-full h-72 sm:h-96 object-contain"
-            />
+      <div
+        className={`min-h-screen  py-10 sm:py-16 transition-colors duration-300 ${
+          isDarkMode
+            ? "bg-gradient-to-b from-slate-900 to-slate-800 text-white"
+            : "bg-gradient-to-b from-slate-50 to-slate-100 text-gray-800"
+        }`}
+      >
+        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+          {/* Left Image Section */}
+          <div className="w-full flex justify-center items-center">
+            <div
+              className={`w-full h-full rounded-3xl shadow-lg border p-4 sm:p-6 md:p-8 lg:p-10 flex justify-center items-center transition-all duration-300
+              ${
+                isDarkMode
+                  ? "border-slate-700 bg-slate-800"
+                  : "border-gray-200 bg-white"
+              }
+            `}
+            >
+              <img
+                src={product.image}
+                alt={product.title}
+                className=" object-contain w-full max-w-[500px] max-h-[220px] sm:max-h-[280px] md:max-h-[420px] lg:max-h-[400px]"
+              />
+            </div>
           </div>
-        </div>
 
-        {/* Detail */}
-        <div className="w-full md:w-1/2 space-y-4">
-          <h1 className="text-3xl sm:text-4xl font-bold mb-2">
-            {product.title}
-          </h1>
-
-          <div className="flex items-center text-yellow-400 text-lg">
-            {stars}
-            <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">
-              ({rating}/5)
+          {/* Right Content Section */}
+          <div className="space-y-4 sm:space-y-5">
+            {/* Category Badge */}
+            <span
+              className={`px-4 py-1 rounded-full text-xs sm:text-sm font-medium w-fit transition-all duration-300 ${
+                isDarkMode
+                  ? "bg-indigo-900 text-indigo-200"
+                  : "bg-indigo-100 text-indigo-700"
+              }`}
+            >
+              {product.category.toUpperCase()}
             </span>
-          </div>
 
-          <p
-            className={`text-md leading-relaxed ${
-              isDarkMode ? "text-gray-300" : "text-gray-600"
-            }`}
-          >
-            {product.description}
-          </p>
-
-          <p
-            className={`text-2xl font-semibold  ${
-              isDarkMode ? "text-indigo-400" : "text-indigo-600"
-            }`}
-          >
-            ${product.price}
-          </p>
-
-          <p className="italic text-sm text-gray-500 dark:text-gray-400">
-            Category: {product.category}
-          </p>
-
-          <div className="pt-6 flex flex-col sm:flex-row gap-4">
-            <button
-              className="w-full sm:w-auto px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-all duration-300"
-              onClick={() => dispatch(addToCart({ id, qty: 1 }))}
+            {/* Title */}
+            <h1
+              className={`text-2xl sm:text-3xl md:text-4xl font-bold leading-snug ${
+                isDarkMode ? "text-white" : "text-slate-800"
+              }`}
             >
-              Add to Cart
-            </button>
-            <Link
-              to="/products"
-              className="w-full sm:w-auto px-6 py-3 border border-indigo-500 text-indigo-500 hover:bg-indigo-500 hover:text-white font-medium rounded-lg transition-all duration-300 text-center"
+              {product.title}
+            </h1>
+
+            {/* Rating */}
+            <div className="flex items-center">
+              {stars}
+              <span className="ml-2 text-sm text-gray-500">{rating}/5</span>
+            </div>
+
+            {/* Price */}
+            <div className="flex items-center gap-3">
+              <p className={`text-2xl sm:text-3xl font-semibold ${isDarkMode ? "text-indigo-400" : "text-indigo-600"}`}>
+                ${product.price}
+              </p>
+            </div>
+
+            {/* Description */}
+            <p
+              className={`leading-relaxed text-sm sm:text-base ${
+                isDarkMode ? "text-gray-300" : "text-gray-600"
+              }`}
             >
-              Back to Products
-            </Link>
+              {product.description}
+            </p>
+
+            {/* Quantity selector */}
+            <div className="flex items-center gap-1 mt-4">
+              <button
+                onClick={() => setQty((q) => Math.max(1, q - 1))}
+                className={`px-4 py-2 rounded-full border transition-colors duration-300 ${
+                  isDarkMode
+                    ? "border-slate-700 hover:bg-slate-700"
+                    : "border-gray-300 hover:bg-slate-300"
+                }`}
+              >
+                -
+              </button>
+
+              <span className="text-lg font-semibold w-8 text-center">
+                {qty}
+              </span>
+
+              <button
+                onClick={() => setQty((q) => Math.max(1, q + 1))}
+                className={`px-4 py-2 rounded-full border transition-colors duration-300 ${
+                  isDarkMode
+                    ? "border-slate-700 hover:bg-slate-700"
+                    : "border-gray-300 hover:bg-slate-300"
+                }`}
+              >
+                +
+              </button>
+            </div>
+
+            {/* Add & Back Buttons */}
+            <div className="flex flex-col gap-4">
+              <button
+                className={`w-full py-4 text-white text-lg font-medium rounded-full transition-all 
+                  ${isDarkMode 
+                    ? "bg-indigo-400 hover:bg-indigo-500" 
+                    : "bg-indigo-600 hover:bg-indigo-700"
+                  } `}
+                onClick={() => dispatch(addToCart({ id, qty }))}
+              >
+                Add to Cart
+              </button>
+
+              <Link
+                to="/products"
+                className={`block text-center underline text-sm transition-all duration-300
+                  ${isDarkMode 
+                    ? "text-indigo-400 hover:text-indigo-300" 
+                    : "text-indigo-500 hover:text-indigo-700" 
+                  }`}
+              >
+                Back to Products
+              </Link>
+            </div>
           </div>
         </div>
       </div>
