@@ -170,7 +170,7 @@ const ProductDetail = () => {
             {/* Add & Back Buttons */}
             <div className="flex flex-col gap-4">
               <button
-                className={`w-full py-4 text-white text-lg font-medium rounded-full transition-all ${
+                className={`w-full py-2 sm:py-4 text-white text-sm sm:text-lg font-medium rounded-full sm:rounded-2xl transition-all ${
                   isDarkMode
                     ? "bg-indigo-400 hover:bg-indigo-500"
                     : "bg-indigo-600 hover:bg-indigo-700"
@@ -180,16 +180,19 @@ const ProductDetail = () => {
                 Add to Cart
               </button>
 
-              <Link
-                to="/products"
-                className={`block text-center underline text-sm transition-all duration-300 ${
-                  isDarkMode
-                    ? "text-indigo-400 hover:text-indigo-300"
-                    : "text-indigo-500 hover:text-indigo-700"
-                }`}
-              >
-                Back to Products
-              </Link>
+              <p className="text-center text-xs sm:text-sm text-slate-200 sm:mt-1 relative">
+                Back to{" "}
+                <Link
+                  to="/products"
+                  className={`cursor-pointer ${
+                    isDarkMode
+                      ? "text-indigo-400 font-semibold hover:text-indigo-600 transition-colors duration-300"
+                      : "text-indigo-800 font-semibold hover:text-indigo-600 transition-colors duration-300"
+                  }`}
+                >
+                  Products
+                </Link>
+              </p>
             </div>
           </div>
         </div>
