@@ -42,7 +42,6 @@ const ProductDetail = () => {
       </div>
     );
 
-  // rating
   const rating = product.rating?.rate || 0;
   const stars = Array.from({ length: 5 }, (_, i) => (
     <Star
@@ -67,7 +66,7 @@ const ProductDetail = () => {
       <Navbar />
 
       <div
-        className={`min-h-screen  py-10 sm:py-16 transition-colors duration-300 ${
+        className={`min-h-screen py-10 sm:py-16 transition-colors duration-300 ${
           isDarkMode
             ? "bg-gradient-to-b from-slate-900 to-slate-800 text-white"
             : "bg-gradient-to-b from-slate-50 to-slate-100 text-gray-800"
@@ -77,18 +76,16 @@ const ProductDetail = () => {
           {/* Left Image Section */}
           <div className="w-full flex justify-center items-center">
             <div
-              className={`w-full h-full rounded-3xl shadow-lg border p-4 sm:p-6 md:p-8 lg:p-10 flex justify-center items-center transition-all duration-300
-              ${
+              className={`w-full h-full rounded-3xl shadow-lg border p-4 sm:p-6 md:p-8 lg:p-10 flex justify-center items-center transition-all duration-300 ${
                 isDarkMode
                   ? "border-slate-700 bg-slate-800"
                   : "border-gray-200 bg-white"
-              }
-            `}
+              }`}
             >
               <img
                 src={product.image}
                 alt={product.title}
-                className=" object-contain w-full max-w-[500px] max-h-[220px] sm:max-h-[280px] md:max-h-[420px] lg:max-h-[400px]"
+                className="object-contain w-full max-w-[500px] max-h-[220px] sm:max-h-[280px] md:max-h-[420px] lg:max-h-[400px]"
               />
             </div>
           </div>
@@ -123,7 +120,11 @@ const ProductDetail = () => {
 
             {/* Price */}
             <div className="flex items-center gap-3">
-              <p className={`text-2xl sm:text-3xl font-semibold ${isDarkMode ? "text-indigo-400" : "text-indigo-600"}`}>
+              <p
+                className={`text-2xl sm:text-3xl font-semibold ${
+                  isDarkMode ? "text-indigo-400" : "text-indigo-600"
+                }`}
+              >
                 ${product.price}
               </p>
             </div>
@@ -169,11 +170,11 @@ const ProductDetail = () => {
             {/* Add & Back Buttons */}
             <div className="flex flex-col gap-4">
               <button
-                className={`w-full py-4 text-white text-lg font-medium rounded-full transition-all 
-                  ${isDarkMode 
-                    ? "bg-indigo-400 hover:bg-indigo-500" 
+                className={`w-full py-4 text-white text-lg font-medium rounded-full transition-all ${
+                  isDarkMode
+                    ? "bg-indigo-400 hover:bg-indigo-500"
                     : "bg-indigo-600 hover:bg-indigo-700"
-                  } `}
+                }`}
                 onClick={() => dispatch(addToCart({ id, qty }))}
               >
                 Add to Cart
@@ -181,11 +182,11 @@ const ProductDetail = () => {
 
               <Link
                 to="/products"
-                className={`block text-center underline text-sm transition-all duration-300
-                  ${isDarkMode 
-                    ? "text-indigo-400 hover:text-indigo-300" 
-                    : "text-indigo-500 hover:text-indigo-700" 
-                  }`}
+                className={`block text-center underline text-sm transition-all duration-300 ${
+                  isDarkMode
+                    ? "text-indigo-400 hover:text-indigo-300"
+                    : "text-indigo-500 hover:text-indigo-700"
+                }`}
               >
                 Back to Products
               </Link>
