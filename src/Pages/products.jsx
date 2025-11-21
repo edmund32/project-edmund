@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { DarkMode } from "../context/DarkMode";
 import Navbar from "../components/Layouts/Navbar";
@@ -56,11 +56,25 @@ const ProductsPage = () => {
     isDarkMode,
   }) => {
     const [open, setOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+      const handleClickOutside = (e) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+          setOpen(false);
+        }
+      };
+
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, []);
 
     return (
-      <div className="relative w-12 sm:w-48">
+      <div ref={dropdownRef} className="relative w-12 sm:w-48">
         <button
-          onClick={() => setOpen(!open)}
+          onClick={() => setOpen((prev) => !prev)}
           className={`w-full px-4 py-2 rounded-lg shadow flex justify-between items-center cursor-pointer 
                       transition-colors duration-300
                       ${
@@ -83,19 +97,24 @@ const ProductsPage = () => {
 
         {/* Dropdown items */}
         <ul
-          className={`absolute right-0
-                      z-20 min-w-full sm:w-full max-h-100 overflow-auto 
-                      rounded-lg border shadow-md transition-all duration-300 origin-top 
-        ${
-          open
-            ? "scale-100 opacity-100"
-            : "scale-95 opacity-0 pointer-events-none"
-        }
-        ${
-          isDarkMode
-            ? "bg-slate-800 text-white border-slate-700"
-            : "bg-white text-gray-900 border-gray-200"
-        }`}
+          className={`
+            absolute right-0 z-20 min-w-full sm:w-full max-h-70 overflow-auto
+            rounded-lg border shadow-md origin-top
+            transition-all duration-300 ease-out
+            ${
+              open
+                ? "opacity-100 scale-y-100 translate-y-1"
+                : "opacity-0 scale-y-95 -translate-y-1 pointer-events-none"
+            }
+            ${
+              isDarkMode
+                ? "bg-slate-800 text-white border-slate-700"
+                : "bg-white text-gray-900 border-gray-200"
+            }
+          `}
+          style={{
+            transformOrigin: "top",
+          }}
         >
           {categories?.map((cat) => (
             <li
@@ -104,10 +123,10 @@ const ProductsPage = () => {
                 setCategory(cat);
                 setOpen(false);
               }}
-              className={`px-4 py-2 capitalize cursor-pointer
-                ${isDarkMode ? "hover:bg-slate-700" : "hover:bg-gray-200"} 
-                ${category === cat ? "font-bold" : ""
-              }`} 
+              className={`px-4 py-2 capitalize cursor-pointer 
+        ${isDarkMode ? "hover:bg-slate-700" : "hover:bg-gray-200"} 
+        ${category === cat ? "font-bold" : ""}
+      `}
             >
               {cat}
             </li>
@@ -128,7 +147,7 @@ const ProductsPage = () => {
       <Navbar />
 
       {/* Header Section */}
-      <header className="max-w-7xl mx-auto mt-10 px-5 sm:px-10 text-center transition-colors duration-200">
+      <header className="max-w-7xl mx-auto mt-10 px-2 sm:px-6 text-center transition-colors duration-200">
         <h1
           className={`text-3xl sm:text-4xl font-bold mb-3 ${
             isDarkMode ? "text-indigo-300" : "text-indigo-600"
@@ -146,7 +165,7 @@ const ProductsPage = () => {
         </p>
 
         {/* Search Bar */}
-        <div className="max-w-2xl w-full mx-auto mb-10 flex flex-row gap-3 sm:gap-4">
+        <div className="w-full max-w-6xl mx-auto mb-10 flex gap-2 sm:gap-3">
           {/* Search */}
           <Input
             type="text"

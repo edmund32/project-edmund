@@ -5,7 +5,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { useNotification } from "../../context/NotificationCon";
 import { ShoppingCart, Sun, Moon } from "lucide-react";
 import CartPopup from "../Fragments/CartPopup";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { clearCart } from "../../redux/slices/cartSlice";
 
 const Navbar = () => {
@@ -40,7 +40,7 @@ const Navbar = () => {
 
   const handleLogoutClick = () => {
     handleLogout();
-    dispatch(clearCart())
+    dispatch(clearCart());
     setIsOpen(false);
     showNotification("Anda berhasil logout.");
   };
@@ -101,64 +101,82 @@ const Navbar = () => {
           <div ref={dropdownRef} className="relative">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className={`flex items-center gap-2 px-2 sm:px-3 py-1.5 sm:py-2 rounded-md text-sm sm:text-md font-medium
-              ${
-                isDarkMode
-                  ? "bg-slate-700 text-slate-50 hover:bg-slate-600"
-                  : "bg-slate-50 text-indigo-700 hover:bg-slate-200"
-              } transition-colors duration-300 cursor-pointer`}
+              className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl text-sm sm:text-md font-medium
+                ${
+                  isDarkMode
+                    ? "bg-slate-700/80 text-slate-100 hover:bg-slate-600/80"
+                    : "bg-white text-indigo-700 hover:bg-slate-100"
+                }
+                shadow-sm transition-all duration-300 cursor-pointer`}
             >
               {/* Avatar */}
               <div
-                className={`w-7 h-7 flex items-center justify-center rounded-full font-bold
-                ${
-                  isDarkMode
-                    ? "bg-indigo-500 text-white"
-                    : "bg-indigo-200 text-indigo-900"
-                }`}
+                className={`w-8 h-8 flex items-center justify-center rounded-full font-bold
+                  ${
+                    isDarkMode
+                      ? "bg-indigo-500 text-white"
+                      : "bg-indigo-200 text-indigo-900"
+                  }`}
               >
                 {username?.charAt(0)?.toUpperCase() || "U"}
               </div>
 
-              {/* Username: tampil di layar sedang ke atas */}
-              <span className="hidden sm:inline">{username || "User"}</span>
+              {/* Username */}
+              <span className="hidden sm:inline font-semibold">
+                {username || "User"}
+              </span>
             </button>
 
             {/* Dropdown Menu */}
-            {isOpen && (
-              <div
-                className={`absolute right-0 mt-2 w-36 sm:w-40 rounded-lg shadow-lg border z-50 
+            <div
+              className={`
+                absolute right-0 z-20 w-full max-h-70 overflow-auto rounded-lg border shadow-xl origin-top transition-all duration-200 ease-out
+                ${
+                  isOpen
+                    ? "opacity-100 scale-y-100 translate-y-1"
+                    : "opacity-0 scale-y-95 -translate-y-1 pointer-events-none"
+                }
                 ${
                   isDarkMode
-                    ? "bg-slate-800 border-slate-700"
-                    : "bg-white border-gray-200"
-                }`}
-              >
-                <button
-                  onClick={() => {
-                    navigate("/profile");
-                    setIsOpen(false);
-                  }}
-                  className={`block w-full text-left px-4 py-2 text-sm ${
+                    ? "bg-slate-800 text-white border-slate-700"
+                    : "bg-white text-gray-900 border-gray-200"
+                }
+              `}
+              style={{ transformOrigin: "top" }}
+            >
+              {/* Profile */}
+              <button
+                onClick={() => {
+                  navigate("/profile");
+                  setIsOpen(false);
+                }}
+                className={`
+                  w-full px-4 py-2.5 text-xs lg:text-sm flex justify-center items-center text-center transition-colors duration-200 rounded-t-lg
+                  ${
                     isDarkMode
-                      ? "hover:bg-slate-700 text-slate-200"
+                      ? "hover:bg-slate-700 text-slate-100"
                       : "hover:bg-gray-100 text-slate-800"
-                  }`}
-                >
-                  Profile
-                </button>
-                <button
-                  onClick={handleLogoutClick}
-                  className={`block w-full text-left px-4 py-2 text-sm ${
+                  }
+                `}
+              >
+                Profile
+              </button>
+
+              {/* Logout */}
+              <button
+                onClick={handleLogoutClick}
+                className={`
+                  w-full px-4 py-2.5 text-xs lg:text-sm  flex justify-center items-center text-center transition-colors duration-200 rounded-b-xl
+                  ${
                     isDarkMode
                       ? "hover:bg-slate-700 text-red-400"
                       : "hover:bg-gray-100 text-red-600"
-                  }`}
-                >
-                  Logout
-                </button>
-              </div>
-            )}
+                  }
+                `}
+              >
+                Logout
+              </button>
+            </div>
           </div>
         </div>
       </div>
