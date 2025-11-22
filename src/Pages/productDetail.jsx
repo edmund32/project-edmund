@@ -105,7 +105,7 @@ const ProductDetail = () => {
 
             {/* Title */}
             <h1
-              className={`text-2xl sm:text-3xl md:text-4xl font-bold leading-snug ${
+              className={`text-2xl sm:text-3xl md:text-4xl font-bold leading-snug transition-colors duration-300 ${
                 isDarkMode ? "text-white" : "text-slate-800"
               }`}
             >
@@ -119,7 +119,7 @@ const ProductDetail = () => {
             </div>
 
             {/* Price */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 transition-colors duration-300">
               <p
                 className={`text-2xl sm:text-3xl font-semibold ${
                   isDarkMode ? "text-indigo-400" : "text-indigo-600"
@@ -131,7 +131,7 @@ const ProductDetail = () => {
 
             {/* Description */}
             <p
-              className={`leading-relaxed text-sm sm:text-base ${
+              className={`leading-relaxed text-sm sm:text-base transition-colors duration-300 ${
                 isDarkMode ? "text-gray-300" : "text-gray-600"
               }`}
             >
@@ -180,14 +180,14 @@ const ProductDetail = () => {
                 Add to Cart
               </button>
 
-              <p className="text-center text-xs sm:text-sm text-slate-200 sm:mt-1 relative">
+              <p className={`text-center text-xs sm:text-sm  sm:mt-1 relative transition-colors duration-300 ${isDarkMode ? "text-slate-200" : "text-slare-600"}`}>
                 Back to{" "}
                 <Link
                   to="/products"
                   className={`cursor-pointer ${
                     isDarkMode
-                      ? "text-indigo-400 font-semibold hover:text-indigo-600 transition-colors duration-300"
-                      : "text-indigo-800 font-semibold hover:text-indigo-600 transition-colors duration-300"
+                      ? "text-indigo-400 font-semibold hover:text-indigo-300 transition-colors duration-300"
+                      : "text-indigo-600 font-semibold hover:text-indigo-400 transition-colors duration-300"
                   }`}
                 >
                   Products

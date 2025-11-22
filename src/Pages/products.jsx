@@ -165,7 +165,7 @@ const ProductsPage = () => {
         </p>
 
         {/* Search Bar */}
-        <div className="w-full max-w-6xl mx-auto mb-10 flex gap-2 sm:gap-3">
+        <div className="w-full max-w-6xl mx-auto mb-10 flex gap-2 sm:gap-3 text-sm md:text-base ">
           {/* Search */}
           <Input
             type="text"
