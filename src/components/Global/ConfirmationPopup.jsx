@@ -28,23 +28,13 @@ const ConfirmationPopup = ({
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className={`p-6 rounded-xl shadow-lg w-72 ${
+            className={`flex-col p-4 rounded-xl shadow-lg w-69 md:w-94 ${
               isDarkMode ? "bg-slate-800 text-white" : "bg-white text-slate-900"
             }`}
           >
-            {/* Header */}
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="font-semibold text-lg">Confirm</h3>
-              <button
-                onClick={onClose}
-                className="hover:opacity-70 transition-opacity"
-              >
-                <X size={18} />
-              </button>
-            </div>
 
             {/* Message */}
-            <p className="text-sm mb-5">{message}</p>
+            <p className="text-xs md:text-sm mb-5">{message}</p>
 
             {/* Action Buttons */}
             <div className="flex justify-end gap-2">
@@ -58,7 +48,7 @@ const ConfirmationPopup = ({
                     : "hover:bg-gray-300",
                   hoverText: "",
                 }}
-                className="px-3 py-1.5 text-sm font-medium"
+                className="px-3 py-1.5 text-xs md:text-sm font-medium"
               >
                 {cancelText}
               </Button>
@@ -73,7 +63,7 @@ const ConfirmationPopup = ({
                     : "hover:bg-red-700",
                   hoverText: "",
                 }}
-                className="px-3 py-1.5 text-sm font-medium"
+                className="px-3 py-1.5 text-xs md:text-sm font-medium"
               >
                 {confirmText}
               </Button>
