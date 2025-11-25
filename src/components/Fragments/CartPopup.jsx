@@ -93,7 +93,7 @@ const CartPopup = ({ onClose }) => {
             {/* Tombol Close */}
             <div className="flex items-center justify-between mb-4">
               <h2
-                className={`text-xl font-bold flex items-center gap-2
+                className={`text-md md:text-xl font-bold flex items-center gap-2
                   ${isDarkMode ? "text-indigo-300" : "text-indigo-500"}`}
               >
                 🛒 Cart
