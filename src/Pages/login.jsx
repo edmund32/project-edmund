@@ -3,7 +3,7 @@ import LoginForm from "../components/Fragments/LoginForm";
 import { useAuth } from "../hooks/useAuth";
 
 const LoginPage = () => {
-  useAuth();
+  useAuth({ redirect: false });
   return (
     <Auth title="Login" type="login">
       <LoginForm />

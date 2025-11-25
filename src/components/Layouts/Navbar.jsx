@@ -151,7 +151,7 @@ const Navbar = () => {
                   setIsOpen(false);
                 }}
                 className={`
-                  w-full px-4 py-2.5 text-xs lg:text-sm flex justify-center items-center text-center transition-colors duration-200 rounded-t-lg
+                  w-full px-4 py-2.5 text-xs lg:text-sm flex justify-center items-center text-center transition-colors duration-200 rounded-t-md
                   ${
                     isDarkMode
                       ? "hover:bg-slate-700 text-slate-100"
@@ -166,7 +166,7 @@ const Navbar = () => {
               <button
                 onClick={handleLogoutClick}
                 className={`
-                  w-full px-4 py-2.5 text-xs lg:text-sm  flex justify-center items-center text-center transition-colors duration-200 rounded-b-xl
+                  w-full px-4 py-2.5 text-xs lg:text-sm  flex justify-center items-center text-center transition-colors duration-200 rounded-b-md
                   ${
                     isDarkMode
                       ? "hover:bg-slate-700 text-red-400"

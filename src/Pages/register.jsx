@@ -3,7 +3,7 @@ import RegisterForm from "../components/Fragments/RegisterForm";
 import { useAuth } from "../hooks/useAuth";
 
 const RegisterPage = () => {
-  useAuth();
+  useAuth({ redirect: false });
   return (
     <Auth title="Register" type="register">
       <RegisterForm />

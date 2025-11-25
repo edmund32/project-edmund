@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { clearCart } from "../redux/slices/cartSlice";
 import { validateToken } from "../services/utils/auth";
 
-export const useAuth = () => {
+export const useAuth = ({ redirect = true } = {}) => {
   const [username, setUsername] = useState("");
   const [isAuthChecked, setIsAuthChecked] = useState(false);
   const navigate = useNavigate();
@@ -16,15 +16,15 @@ export const useAuth = () => {
     if (!isValid) {
       localStorage.clear();
       dispatch(clearCart());
-      navigate("/login");
+      if (redirect) navigate("/login"); // <--- ini penting
+      setIsAuthChecked(true);
       return;
     }
 
     const name = localStorage.getItem("username");
     if (name) setUsername(name);
-    
-    setIsAuthChecked(true);
 
+    setIsAuthChecked(true);
   }, []);
 
   const handleLogout = () => {

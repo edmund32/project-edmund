@@ -10,8 +10,6 @@ export const useLogin = () => {
     const token = localStorage.getItem("token");
     if (token) {
       setUsername(getUsername(token));
-    } else {
-      navigate("/login");
     }
   }, []);
 

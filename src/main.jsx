@@ -48,7 +48,7 @@ createRoot(document.getElementById("root")).render(
         <TotalPriceProvider>
           <NotificationProvider>
             <PopupAlert />
-            <RouterProvider router={router} />
+            <RouterProvider router={router}/>
           </NotificationProvider>
         </TotalPriceProvider>
       </DarkModeContextProvider>
