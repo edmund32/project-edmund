@@ -186,7 +186,7 @@ const ProductDetail = () => {
               >
                 Add to Cart
               </button>
-
+              
               <p
                 className={`text-center text-xs sm:text-sm  sm:mt-1 relative transition-colors duration-300 ${
                   isDarkMode ? "text-slate-200" : "text-slare-600"
