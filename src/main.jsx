@@ -16,6 +16,7 @@ import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 import PublicRoute from "./routes/PublicRoute.jsx";
 import { NotificationProvider } from "./context/NotificationCon.jsx";
 import { Navigate } from "react-router-dom";
+import PopupAlert from "./components/Global/PopupAlert.jsx";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,7 @@ createRoot(document.getElementById("root")).render(
       <DarkModeContextProvider>
         <TotalPriceProvider>
           <NotificationProvider>
+            <PopupAlert />
             <RouterProvider router={router} />
           </NotificationProvider>
         </TotalPriceProvider>

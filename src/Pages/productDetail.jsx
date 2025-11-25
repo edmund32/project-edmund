@@ -6,6 +6,8 @@ import Navbar from "../components/Layouts/Navbar";
 import { Star } from "lucide-react";
 import { addToCart } from "../redux/slices/cartSlice";
 import { useDispatch } from "react-redux";
+import { usePopupAlertStore } from "../zustand/usePopupAlertStore";
+import { set } from "react-hook-form";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -14,6 +16,7 @@ const ProductDetail = () => {
   const { isDarkMode } = useContext(DarkMode);
   const dispatch = useDispatch();
   const [qty, setQty] = useState(1);
+  const openPopup = usePopupAlertStore((state) => state.openPopup);
 
   useEffect(() => {
     getDetailProduct(id, (data) => {
@@ -175,12 +178,20 @@ const ProductDetail = () => {
                     ? "bg-indigo-400 hover:bg-indigo-500"
                     : "bg-indigo-600 hover:bg-indigo-700"
                 }`}
-                onClick={() => dispatch(addToCart({ id, qty }))}
+                onClick={() => {
+                  dispatch(addToCart({ id, qty }));
+                  openPopup("Produk berhasil ditambahkan ke keranjang!");
+                  setQty(1);
+                }}
               >
                 Add to Cart
               </button>
 
-              <p className={`text-center text-xs sm:text-sm  sm:mt-1 relative transition-colors duration-300 ${isDarkMode ? "text-slate-200" : "text-slare-600"}`}>
+              <p
+                className={`text-center text-xs sm:text-sm  sm:mt-1 relative transition-colors duration-300 ${
+                  isDarkMode ? "text-slate-200" : "text-slare-600"
+                }`}
+              >
                 Back to{" "}
                 <Link
                   to="/products"
