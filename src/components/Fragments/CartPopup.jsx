@@ -11,15 +11,24 @@ import {
 } from "../../context/totalPriceCon";
 import { clearCart } from "../../redux/slices/cartSlice";
 import ConfirmationPopup from "../Global/ConfirmationPopup";
+import { motion, AnimatePresence } from "framer-motion";
 
 const CartPopup = ({ onClose }) => {
   const { isDarkMode } = useContext(DarkMode);
   const cart = useSelector((state) => state.cart?.data ?? []);
   const dispatch = useDispatch();
+
   const [products, setProducts] = useState([]);
   const totalDispatch = useTotalPriceDispatch();
   const { total } = useTotalPrice();
-  const [showPopup, setShowPopup] = useState(false); // state buat popup
+
+  const [showPopup, setShowPopup] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
+
+  const handleClose = () => {
+    setIsOpen(false);
+    setTimeout(() => onClose(), 200);
+  };
 
   const confirmClearCart = () => {
     dispatch(clearCart());
@@ -52,68 +61,98 @@ const CartPopup = ({ onClose }) => {
   }, [cart, products]);
 
   return createPortal(
-    <div
-      className="fixed inset-0 z-50 flex justify-center items-center bg-black/50 backdrop-blur-xs"
-      onClick={onClose}
-    >
-      <div
-        className={`relative w-[95%] sm:w-[700px] 
-         max-h-[93vh] sm:max-h-[88vh] 
-         overflow-y-auto rounded-2xl p-6 sm:p-8 
-          shadow-xl transition-all duration-300 mx-4 sm:mx-0 ${
-            isDarkMode
-              ? "bg-slate-800 text-indigo-200"
-              : "bg-white text-slate-800"
-          }`}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Tombol Close */}
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 text-gray-400 hover:text-indigo-500 transition"
+    <AnimatePresence mode="wait">
+      {isOpen && (
+        <motion.div
+          key="overlay"
+          className={`fixed inset-0 z-50 flex justify-center items-center 
+          backdrop-blur-xs 
+          ${isDarkMode ? "bg-black/60" : "bg-black/40"}`}
+          onClick={handleClose}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
         >
-          <X size={22} />
-        </button>
+          <motion.div
+            key="card"
+            onClick={(e) => e.stopPropagation()}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className={`relative w-[95%] sm:w-[700px] max-h-[93vh]
+            overflow-y-auto rounded-2xl p-6 sm:p-8 shadow-xl
+            transition-colors duration-200
+            ${
+              isDarkMode
+                ? "bg-slate-800 text-indigo-200 border border-slate-700"
+                : "bg-white text-slate-800 border border-gray-200"
+            }`}
+          >
+            {/* Tombol Close */}
+            <div className="flex items-center justify-between mb-4">
+              <h2
+                className={`text-xl font-bold flex items-center gap-2
+                  ${isDarkMode ? "text-indigo-300" : "text-indigo-500"}`}
+              >
+                🛒 Cart
+              </h2>
 
-        <h2 className="text-xl font-bold mb-4 text-indigo-500 flex items-center gap-2">
-          🛒 Cart
-        </h2>
-
-        {cart.length === 0 ? (
-          <p className="text-gray-400 text-center py-10">Your cart is empty.</p>
-        ) : (
-          <>
-            <div className="max-h-[55vh] overflow-y-auto pr-1 overflow-x-auto">
-              <TableCart
-                products={products}
-                onClearCart={() => setShowPopup(true)}
-              />
+              <button
+                onClick={handleClose}
+                className={`transition
+                  ${
+                    isDarkMode
+                      ? "text-gray-400 hover:text-indigo-300"
+                      : "text-gray-500 hover:text-indigo-500"
+                  }`}
+              >
+                <X size={22} />
+              </button>
             </div>
 
-            <div
-              className={`pt-4 text-right ${
-                isDarkMode ? "border-slate-700" : "border-gray-200"
-              }`}
-            >
-              <span className="text-lg font-semibold">Total Price:&nbsp;</span>
-              <span className="text-xl font-bold text-indigo-500">
-                ${total.toFixed(2)}
-              </span>
-            </div>
-          </>
-        )}
+            {cart.length === 0 ? (
+              <p className="text-gray-400 text-center py-10">
+                Your cart is empty.
+              </p>
+            ) : (
+              <>
+                <div className="max-h-[55vh] overflow-y-auto pr-1 overflow-x-auto">
+                  <TableCart
+                    products={products}
+                    onClearCart={() => setShowPopup(true)}
+                  />
+                </div>
 
-        {/* Popup COnfirmation */}
-        <ConfirmationPopup
-          show={showPopup}
-          onClose={() => setShowPopup(false)}
-          onConfirm={confirmClearCart}
-          message="Are you sure you want to delete all items from the cart?"
-          confirmText="Yes, delete all"
-          cancelText="Cancel"
-        />
-      </div>
-    </div>,
+                <div
+                  className={`pt-4 text-right ${
+                    isDarkMode ? "border-slate-700" : "border-gray-200"
+                  }`}
+                >
+                  <span className="text-lg font-semibold">
+                    Total Price:&nbsp;
+                  </span>
+                  <span className="text-xl font-bold text-indigo-500">
+                    ${total.toFixed(2)}
+                  </span>
+                </div>
+              </>
+            )}
+
+            {/* Popup Confirmation */}
+            <ConfirmationPopup
+              show={showPopup}
+              onClose={() => setShowPopup(false)}
+              onConfirm={confirmClearCart}
+              message="Are you sure you want to delete all items from the cart?"
+              confirmText="Yes, delete all"
+              cancelText="Cancel"
+            />
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>,
     document.body
   );
 };
