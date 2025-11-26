@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { DarkMode } from "../../context/DarkMode";
 import { useAuth } from "../../hooks/useAuth";
 import { useNotification } from "../../context/NotificationCon";
-import { ShoppingCart, Sun, Moon } from "lucide-react";
+import { ShoppingCart, Sun, Moon, Menu, X } from "lucide-react";
 import CartPopup from "../Fragments/CartPopup";
 import { useSelector, useDispatch } from "react-redux";
 import { clearCart } from "../../redux/slices/cartSlice";
@@ -12,175 +12,252 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { isDarkMode, setIsDarkMode } = useContext(DarkMode);
   const { username, handleLogout } = useAuth();
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef(null);
   const { showNotification } = useNotification();
-  const [showCart, setShowCart] = useState(false);
+
+  const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.data ?? []);
   const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+
+  const [showCart, setShowCart] = useState(false);
   const [isBouncing, setIsBouncing] = useState(false);
-  const dispatch = useDispatch();
+
+  // Mobile menu
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  // Desktop dropdown
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
+    if (totalItems > 0) {
+      setIsBouncing(true);
+      const timeout = setTimeout(() => setIsBouncing(false), 600);
+      return () => clearTimeout(timeout);
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  useEffect(() => {
-    if (totalItems === 0) return;
-    setIsBouncing(true);
-    const timeout = setTimeout(() => setIsBouncing(false), 600);
-    return () => clearTimeout(timeout);
   }, [cart]);
 
-  const handleLogoutClick = () => {
+  // Click outside → close dropdown
+  useEffect(() => {
+    const handler = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const onLogout = () => {
     handleLogout();
     dispatch(clearCart());
-    setIsOpen(false);
     showNotification("Anda berhasil logout.");
+    setIsDropdownOpen(false);
+    setMenuOpen(false);
   };
 
   return (
-    <nav
-      className={`sticky z-50 top-0 w-full backdrop-blur-md shadow 
-      ${
-        isDarkMode
-          ? "bg-slate-800/80 text-white"
-          : "bg-indigo-700/90 text-white"
-      }`}
-    >
-      {/* Main Container */}
-      <div className="flex justify-between items-center h-13 sm:h-16 px-4 sm:px-8">
-        {/* Left: Logo / Brand */}
-        <h1
-          className="text-lg sm:text-2xl font-bold tracking-wide cursor-pointer"
-          onClick={() => navigate("/products")}
-        >
-          E-Commerce
-        </h1>
-
-        {/* Controls */}
-        <div className="flex items-center gap-2 sm:gap-5 relative">
-          {/* Tombol Cart */}
-          <button
-            onClick={() => setShowCart(true)}
-            className="relative text-gray-100 hover:text-indigo-300 cursor-pointer transition-all duration-300"
+    <>
+      {/* NAVBAR */}
+      <nav
+        className={`sticky top-0 w-full z-50 backdrop-blur-md shadow 
+        ${
+          isDarkMode
+            ? "bg-slate-800/80 text-white"
+            : "bg-indigo-600/90 text-slate-50"
+        }`}
+      >
+        <div className="h-12 sm:h-15 flex items-center justify-between px-4 sm:px-6">
+          {/* LOGO */}
+          <h1
+            className="text-xl sm:text-2xl font-bold cursor-pointer tracking-wide"
+            onClick={() => navigate("/products")}
           >
-            <ShoppingCart size={20} />
-            {totalItems > 0 && (
-              <span
-                className={`absolute -top-2 -right-2 bg-red-500 text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center ${
-                  isBouncing ? "animate-bounce" : ""
-                }`}
-              >
-                {totalItems}
-              </span>
-            )}
-          </button>
+            E-Commerce
+          </h1>
 
-          {showCart && <CartPopup onClose={() => setShowCart(false)} />}
-
-          {/* Dark Mode Toggle */}
-          <button
-            onClick={() => setIsDarkMode(!isDarkMode)}
-            className={`p-1.75 rounded-full transition-all duration-300 ${
-              isDarkMode
-                ? "bg-slate-700 hover:bg-slate-600 text-yellow-400"
-                : "bg-indigo-100 hover:bg-indigo-200 text-indigo-700"
-            }`}
-          >
-            {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-          </button>
-
-          {/* Profile Dropdown */}
-          <div ref={dropdownRef} className="relative">
+          {/* RIGHT SECTION */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* DARK MODE TOGGLE */}
             <button
-              onClick={() => setIsOpen(!isOpen)}
-              className={`flex items-center gap-2 px-2 sm:px-3 py-2 rounded-xl text-xs sm:text-base font-medium
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className={`p-2 rounded-full transition-all duration-300
                 ${
                   isDarkMode
-                    ? "bg-slate-700/80 text-slate-100 hover:bg-slate-600/80"
-                    : "bg-white text-indigo-700 hover:bg-slate-100"
-                }
-                shadow-sm transition-all duration-300 cursor-pointer`}
+                    ? "bg-slate-700 hover:bg-slate-600 text-yellow-300"
+                    : "bg-gray-200 hover:bg-slate-300 text-indigo-600"
+                }`}
             >
-              {/* Avatar */}
-              <div
-                className={`w-5 md:w-8 h-5 md:h-8 flex items-center justify-center rounded-full font-bold
-                  ${
-                    isDarkMode
-                      ? "bg-indigo-500 text-white"
-                      : "bg-indigo-200 text-indigo-900"
-                  }`}
-              >
-                {username?.charAt(0)?.toUpperCase() || "U"}
-              </div>
-
-              {/* Username */}
-              <span className="hidden sm:inline font-semibold">
-                {username || "User"}
-              </span>
+              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
 
-            {/* Dropdown Menu */}
-            <div
-              className={`
-                absolute right-0 z-20 w-full max-h-70 overflow-auto rounded-lg border shadow-xl origin-top transition-all duration-200 ease-out
-                ${
-                  isOpen
-                    ? "opacity-100 scale-y-100 translate-y-1"
-                    : "opacity-0 scale-y-95 -translate-y-1 pointer-events-none"
-                }
-                ${
-                  isDarkMode
-                    ? "bg-slate-800 text-white border-slate-700"
-                    : "bg-white text-gray-900 border-gray-200"
-                }
-              `}
-              style={{ transformOrigin: "top" }}
+            {/* CART BUTTON */}
+            <button
+              onClick={() => setShowCart(true)}
+              className="relative hover:opacity-80 transition-all"
             >
-              {/* Profile */}
+              <ShoppingCart size={22} />
+              {totalItems > 0 && (
+                <span
+                  className={`absolute -top-2 -right-2 bg-red-500 text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center 
+                    ${isBouncing ? "animate-bounce" : ""}`}
+                >
+                  {totalItems}
+                </span>
+              )}
+            </button>
+
+            {showCart && <CartPopup onClose={() => setShowCart(false)} />}
+
+            {/* DESKTOP DROPDOWN */}
+            <div ref={dropdownRef} className="relative hidden sm:block">
               <button
-                onClick={() => {
-                  navigate("/profile");
-                  setIsOpen(false);
-                }}
-                className={`
-                  w-full px-4 py-2.5 text-xs lg:text-sm flex justify-center items-center text-center transition-colors duration-200 rounded-t-md
+                onClick={() => setIsDropdownOpen((prev) => !prev)}
+                className={`flex items-center gap-2 px-2 py-1.5 rounded-xl transition-all
                   ${
                     isDarkMode
-                      ? "hover:bg-slate-700 text-slate-100"
-                      : "hover:bg-gray-100 text-slate-800"
-                  }
-                `}
+                      ? "hover:bg-slate-700 text-white"
+                      : "hover:bg-indigo-400 text-gray-50"
+                  }`}
               >
-                Profile
+                <div
+                  className={`w-8 h-8 rounded-full flex items-center justify-center font-bold
+                  ${
+                    isDarkMode
+                      ? "bg-indigo-500"
+                      : "bg-indigo-200 text-indigo-900"
+                  }`}
+                >
+                  {username?.charAt(0)?.toUpperCase() || "U"}
+                </div>
+                <span className="font-semibold">{username || "User"}</span>
               </button>
 
-              {/* Logout */}
-              <button
-                onClick={handleLogoutClick}
+              {/* DROPDOWN MENU */}
+              <div
                 className={`
-                  w-full px-4 py-2.5 text-xs lg:text-sm  flex justify-center items-center text-center transition-colors duration-200 rounded-b-md
+                  absolute right-0 mt-1 w-40 rounded-lg shadow-lg border transition-all duration-200 origin-top
+                  ${
+                    isDropdownOpen
+                      ? "opacity-100 scale-100"
+                      : "opacity-0 scale-95 pointer-events-none"
+                  }
                   ${
                     isDarkMode
-                      ? "hover:bg-slate-700 text-red-400"
-                      : "hover:bg-gray-100 text-red-600"
+                      ? "bg-slate-800 border-slate-700 text-white"
+                      : "bg-white border-gray-200 text-gray-900"
                   }
                 `}
               >
-                Logout
-              </button>
+                {/* ITEM */}
+                <button
+                  onClick={() => navigate("/profile")}
+                  className={`
+                    w-full px-4 py-2 text-left rounded-t-lg 
+                    transition-all
+                    ${isDarkMode ? "hover:bg-slate-700" : "hover:bg-gray-200"}
+                  `}
+                >
+                  Profile
+                </button>
+
+                <button
+                  onClick={onLogout}
+                  className={`
+                    w-full px-4 py-2 text-left rounded-b-lg
+                    text-red-500 
+                    transition-all
+                    ${isDarkMode ? "hover:bg-red-900" : "hover:bg-red-100"}
+                  `}
+                >
+                  Logout
+                </button>
+              </div>
             </div>
+
+            {/* HAMBURGER MOBILE */}
+            <button
+              className="block sm:hidden"
+              onClick={() => setMenuOpen(true)}
+            >
+              <Menu size={26} />
+            </button>
           </div>
         </div>
+      </nav>
+
+      {/* MOBILE SLIDE MENU */}
+      <div
+        className={`fixed top-0 right-0 h-full w-72 z-50 shadow-xl transition-transform duration-300 
+          ${menuOpen ? "translate-x-0" : "translate-x-full"}
+          ${isDarkMode ? "bg-slate-800 text-white" : "bg-white text-gray-900"}
+        `}
+        >
+        {/* HEADER */}
+        <div
+          className={`flex items-center justify-between p-4 border-b 
+            ${isDarkMode ? "border-slate-700" : "border-gray-200"}
+          `}
+        >
+          <h2 className="text-lg font-semibold tracking-wide">Menu</h2>
+          <button
+            onClick={() => setMenuOpen(false)}
+            className="p-2 rounded-lg hover:bg-slate-800/40 dark:hover:bg-slate-700/40 transition"
+          >
+            <X size={22} />
+          </button>
+        </div>
+
+        {/* CONTENT */}
+        <div className="p-5">
+          {/* AVATAR + USER */}
+          <div className="flex items-center gap-3 mb-6">
+            <div
+              className={`w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold shadow 
+                ${isDarkMode ? "bg-indigo-600" : "bg-indigo-300 text-indigo-900"}
+              `}
+            >
+              {username?.charAt(0)?.toUpperCase()}
+            </div>
+
+            <div>
+              <p className="font-semibold text-lg">{username}</p>
+            </div>
+          </div>
+
+          {/* DIVIDER */}
+          <div
+            className={`h-px mb-6 
+              ${isDarkMode ? "bg-slate-700" : "bg-gray-200"}
+            `}
+          />
+
+          {/* MENU ITEMS */}
+          <button
+            onClick={() => {
+              navigate("/profile");
+              setMenuOpen(false);
+            }}
+            className={`
+              w-full px-4 py-3 border-b border-gray-700 text-left mb-2 font-medium transition
+              ${isDarkMode ? "hover:bg-slate-700" : "hover:bg-gray-100"}
+            `}
+          >
+            Profile
+          </button>
+
+          <button
+            onClick={onLogout}
+            className={`
+              w-full px-4 py-3 text-left rounded-lg font-medium transition
+              text-red-500
+              ${isDarkMode ? "hover:bg-red-900" : "hover:bg-red-100"}
+            `}
+          >
+            Logout
+          </button>
+        </div>
       </div>
-    </nav>
+    </>
   );
 };
 
