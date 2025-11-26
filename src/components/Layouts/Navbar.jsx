@@ -55,23 +55,23 @@ const Navbar = () => {
       }`}
     >
       {/* Main Container */}
-      <div className="flex justify-between items-center h-16 px-4 sm:px-8">
+      <div className="flex justify-between items-center h-13 sm:h-16 px-4 sm:px-8">
         {/* Left: Logo / Brand */}
         <h1
-          className="text-xl sm:text-2xl font-bold tracking-wide cursor-pointer"
+          className="text-lg sm:text-2xl font-bold tracking-wide cursor-pointer"
           onClick={() => navigate("/products")}
         >
           E-Commerce
         </h1>
 
         {/* Controls */}
-        <div className="flex items-center gap-3 sm:gap-5 relative">
+        <div className="flex items-center gap-2 sm:gap-5 relative">
           {/* Tombol Cart */}
           <button
             onClick={() => setShowCart(true)}
             className="relative text-gray-100 hover:text-indigo-300 cursor-pointer transition-all duration-300"
           >
-            <ShoppingCart size={22} />
+            <ShoppingCart size={20} />
             {totalItems > 0 && (
               <span
                 className={`absolute -top-2 -right-2 bg-red-500 text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center ${
@@ -88,20 +88,20 @@ const Navbar = () => {
           {/* Dark Mode Toggle */}
           <button
             onClick={() => setIsDarkMode(!isDarkMode)}
-            className={`p-2 rounded-full transition-all duration-300 ${
+            className={`p-1.75 rounded-full transition-all duration-300 ${
               isDarkMode
                 ? "bg-slate-700 hover:bg-slate-600 text-yellow-400"
                 : "bg-indigo-100 hover:bg-indigo-200 text-indigo-700"
             }`}
           >
-            {isDarkMode ? <Sun size={22} /> : <Moon size={22} />}
+            {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
           </button>
 
           {/* Profile Dropdown */}
           <div ref={dropdownRef} className="relative">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl text-sm sm:text-md font-medium
+              className={`flex items-center gap-2 px-2 sm:px-3 py-2 rounded-xl text-xs sm:text-base font-medium
                 ${
                   isDarkMode
                     ? "bg-slate-700/80 text-slate-100 hover:bg-slate-600/80"
@@ -111,7 +111,7 @@ const Navbar = () => {
             >
               {/* Avatar */}
               <div
-                className={`w-8 h-8 flex items-center justify-center rounded-full font-bold
+                className={`w-5 md:w-8 h-5 md:h-8 flex items-center justify-center rounded-full font-bold
                   ${
                     isDarkMode
                       ? "bg-indigo-500 text-white"
