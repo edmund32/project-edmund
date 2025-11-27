@@ -22,7 +22,7 @@ const PopupAlert = () => {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className={`w-[90%] max-w-[600px] p-6 md:p-10 rounded-4xl shadow-2xl border
+            className={`w-[90%] max-w-[600px] p-6 md:p-10 rounded-xl shadow-2xl border
           ${
             isDarkMode
               ? "bg-slate-800 border-slate-700 text-white"
