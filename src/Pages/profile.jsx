@@ -158,15 +158,15 @@ const ProfilePage = () => {
             error={errors.password?.message}
           />
 
-          <div className="flex flex-col gap-3 pt-4">
+          <div className="flex flex-col gap-3 pt-2">
             <Button
               type="submit"
               variant={{
                 bg: isDarkMode ? "bg-indigo-400" : "bg-indigo-700",
-                text: "text-white",
+                text: "text-white text-sm sm:text-base",
                 hoverBg: "hover:bg-indigo-50",
               }}
-              className="w-full h-12 font-semibold"
+              className="w-full h-9 sm:h-12 font-semibold"
             >
               Save Changes
             </Button>
@@ -176,11 +176,11 @@ const ProfilePage = () => {
               onClick={handleDelete}
               variant={{
                 bg: isDarkMode ? "bg-red-700" : "bg-red-600",
-                text: "text-white",
+                text: "text-white text-sm sm:text-base",
                 hoverBg: "hover:bg-red-900",
                 hoverText: "text-slate-100",
               }}
-              className="w-full h-12 font-semibold"
+              className="w-full h-9 sm:h-12 font-semibold"
             >
               Delete Account
             </Button>
