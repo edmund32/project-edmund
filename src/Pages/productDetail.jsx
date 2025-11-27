@@ -49,7 +49,7 @@ const ProductDetail = () => {
   const stars = Array.from({ length: 5 }, (_, i) => (
     <Star
       key={i}
-      size={20}
+      size={18}
       className={`${
         i < Math.round(rating)
           ? "text-yellow-400 fill-yellow-400"
@@ -69,7 +69,7 @@ const ProductDetail = () => {
       <Navbar />
 
       <div
-        className={`min-h-screen py-10 sm:py-16 transition-colors duration-300 ${
+        className={`min-h-screen py-6 sm:py-6 md:py-12 transition-colors duration-300 ${
           isDarkMode
             ? "bg-gradient-to-b from-slate-900 to-slate-800 text-white"
             : "bg-gradient-to-b from-slate-50 to-slate-100 text-gray-800"
@@ -79,10 +79,10 @@ const ProductDetail = () => {
           {/* Left Image Section */}
           <div className="w-full flex justify-center items-center">
             <div
-              className={`w-full h-full rounded-3xl shadow-lg border p-4 sm:p-6 md:p-8 lg:p-10 flex justify-center items-center transition-all duration-300 ${
+              className={`w-full h-full rounded-2xl shadow-lg p-4 sm:p-6 md:p-8 lg:p-10 flex justify-center items-center transition-all duration-300 ${
                 isDarkMode
-                  ? "border-slate-700 bg-slate-800"
-                  : "border-gray-200 bg-white"
+                  ? "bg-slate-800"
+                  : "bg-white"
               }`}
             >
               <img
@@ -134,8 +134,8 @@ const ProductDetail = () => {
 
             {/* Description */}
             <p
-              className={`leading-relaxed text-sm sm:text-base transition-colors duration-300 ${
-                isDarkMode ? "text-gray-300" : "text-gray-600"
+              className={`leading-relaxed p-4 shadow-lg rounded-xl text-sm sm:text-base transition-colors duration-300 ${
+                isDarkMode ? "bg-slate-800 text-gray-300" : "bg-slate-100 text-gray-600"
               }`}
             >
               {product.description}

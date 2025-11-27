@@ -76,7 +76,7 @@ const ProductsPage = () => {
         <button
           onClick={() => setOpen((prev) => !prev)}
           className={`w-full px-4 py-2 rounded-lg shadow flex justify-between items-center cursor-pointer 
-                      transition-colors duration-300
+                      transition-all duration-300
                       ${
                         isDarkMode
                           ? "bg-slate-800 text-white hover:bg-slate-700"
@@ -99,7 +99,7 @@ const ProductsPage = () => {
         <ul
           className={`
             absolute right-0 z-20 min-w-full sm:w-full max-h-70 overflow-auto
-            rounded-lg border shadow-md origin-top
+            rounded-lg border shadow-md origin-top 
             transition-all duration-300 ease-out
             ${
               open
@@ -138,16 +138,16 @@ const ProductsPage = () => {
 
   return (
     <div
-      className={`min-h-screen transition-colors duration-300 ${
+      className={`min-h-screen transition-all duration-300 ${
         isDarkMode
-          ? "bg-gradient-to-b from-slate-900 to-slate-800 text-white"
+          ? "bg-slate-900 text-white"
           : "bg-slate-100 text-black"
       }`}
     >
       <Navbar />
 
       {/* Header Section */}
-      <header className="max-w-7xl mx-auto mt-10 px-2 sm:px-6 text-center transition-colors duration-200">
+      <header className="max-w-7xl mx-auto mt-10 px-2 sm:px-6 text-center transition-all duration-200">
         <h1
           className={`text-3xl sm:text-4xl font-bold mb-3 ${
             isDarkMode ? "text-indigo-300" : "text-indigo-600"
