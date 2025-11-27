@@ -5,9 +5,9 @@ import { DarkMode } from "../../../context/DarkMode";
 const Input = forwardRef((props, ref) => {
   const { isDarkMode } = useContext(DarkMode);
   const { type, placeholder, name, value, onChange, className } = props;
-  const authPath = window.location.pathname.includes("/products");
+  const productPath = window.location.pathname.includes("/products");
   
-  if(authPath){
+  if(productPath){
     return (
       <input
         ref={ref}
@@ -33,7 +33,7 @@ const Input = forwardRef((props, ref) => {
       placeholder={placeholder}
       value={value}
       onChange={onChange}
-      className={`text-sm border-2 rounded-md w-full py-2 px-3 text-black placeholder:text-slate-400
+      className={`text-xs sm:text-sm border-2 rounded-md w-full py-1.75 sm:py-2 px-3 text-black placeholder:text-slate-400
         focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 ${className} 
         ${isDarkMode ? "bg-slate-900 text-white" : "bg-slate-200 text-black"}`}
     />

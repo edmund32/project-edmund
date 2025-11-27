@@ -18,7 +18,7 @@ const InputForm = forwardRef((props, ref) => {
   const { isDarkMode } = useContext(DarkMode);
 
   return (
-    <div className={`${compact ? "mb-2" : "mb-3"} relative`}>
+    <div className={`${compact ? "mb-2" : "mb-1.75"} relative`}>
       <Label htmlFor={name}>{label}</Label>
       <Input
         ref={ref}

@@ -88,15 +88,15 @@ const LoginForm = () => {
 
         {loginError && <p className="text-sm text-red-500">{loginError}</p>}
 
-        <div className="flex pt-4 justify-center">
+        <div className="flex pt-2 sm:pt-4 justify-center">
           <Button
             variant={{
               bg: isDarkMode ? "bg-indigo-400" : "bg-indigo-700",
-              text: "text-white",
+              text: "text-white text-sm sm:text-base",
               hoverBg: isDarkMode ? "hover:bg-slate-200" : "hover:bg-indigo-800",
               hoverText: isDarkMode ? "hover:text-indigo-700" : "hover:text-slate-300",
             }}
-            className="w-35 h-12 w-full"
+            className="w-35 h-9 sm:h-12 w-full"
             type="submit"
           >
             Login

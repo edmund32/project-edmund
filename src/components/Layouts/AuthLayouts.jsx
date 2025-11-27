@@ -35,7 +35,7 @@ const Auth = ({ children, title, type }) => {
         }`}
       >
         {/* Header: Title + Tombol Dark Mode */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-4 md:mb-6">
           <h1
             className={`text-3xl sm:text-4xl font-bold tracking-tight ${
               isDarkMode ? "text-indigo-400" : "text-indigo-700"
@@ -58,7 +58,7 @@ const Auth = ({ children, title, type }) => {
         </div>
 
         <p
-          className={`mb-8 text-sm sm:text-base leading-relaxed transition-colors duration-300 ${
+          className={`mb-6 md:mb-8 text-xs sm:text-base leading-relaxed transition-colors duration-300 ${
             isDarkMode ? "text-slate-300" : "text-slate-600"
           }`}
         >
@@ -73,7 +73,7 @@ const Auth = ({ children, title, type }) => {
         {/* Link to Login/Register */}
         {type !== "profile" && (
           <p
-            className={`flex justify-center text-sm pt-6 flex-wrap text-center ${
+            className={`flex justify-center text-xs sm:text-sm pt-4 sm:pt-6 flex-wrap text-center ${
               isDarkMode ? "text-slate-300" : "text-slate-600"
             }`}
           >

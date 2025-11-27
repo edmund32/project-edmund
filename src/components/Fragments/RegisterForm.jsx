@@ -97,15 +97,15 @@ const RegisterForm = () => {
         error={errors.password?.message}
       />
 
-      <div className="flex flex-col items-center pt-2">
+      <div className="flex flex-col items-center pt-2 sm:pt-4">
         <Button
           variant={{
             bg: isDarkMode ? "bg-indigo-400" : "bg-indigo-700",
-            text: "text-white",
+            text: "text-white text-sm sm:text-base",
             hoverBg: "hover:bg-slate-200",
             hoverText: "hover:text-indigo-700",
           }}
-          className="w-35 h-12 w-full"
+          className="w-35 h-9 sm:h-12 w-full"
           type="submit"
         >
           Register

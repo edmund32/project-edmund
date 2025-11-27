@@ -7,7 +7,7 @@ const Label = (props) => {
   return (
     <label
       htmlFor={htmlFor}
-      className={`block text-sm font-bold mb-2 md:w-1/2 transition-colors duration-300 ${
+      className={`block text-xs sm:text-sm font-bold mb-2 md:w-1/2 transition-colors duration-300 ${
         isDarkMode ? "text-white" : "text-black"
       }`}
     >
