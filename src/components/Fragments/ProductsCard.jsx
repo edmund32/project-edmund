@@ -137,33 +137,9 @@ const Footer = ({ price, id }) => {
   );
 };
 
-/* ===== DETAIL HEADER ===== */
-const DetailHeader = ({ image }) => (
-  <div className="flex items-center justify-center bg-slate-100 dark:bg-slate-700 rounded-xl p-3 sm:p-4">
-    <img
-      src={image}
-      alt="product"
-      className="rounded-xl object-contain max-h-72 sm:max-h-96 transition-transform duration-300 hover:scale-105"
-    />
-  </div>
-);
-
-/* ===== DETAIL BODY ===== */
-const DetailBody = ({ title, children }) => (
-  <div className="flex flex-col justify-center">
-    <h2 className="text-2xl sm:text-3xl font-bold text-indigo-700 dark:text-indigo-300 mb-3 sm:mb-4">
-      {title}
-    </h2>
-    <p className="text-gray-700 dark:text-gray-200 text-sm sm:text-md leading-relaxed">
-      {children}
-    </p>
-  </div>
-);
 
 ProductsCard.Header = Header;
 ProductsCard.Body = Body;
 ProductsCard.Footer = Footer;
-ProductsCard.DetailHeader = DetailHeader;
-ProductsCard.DetailBody = DetailBody;
 
 export { ProductsCard };
